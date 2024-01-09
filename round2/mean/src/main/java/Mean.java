@@ -12,7 +12,7 @@ public class Mean {
 
     public static void main(String[] args) {
         Scanner myScanner = new Scanner(System.in);
-        System.out.print("Enter numbers: ");
+        System.out.print("Enter numbers:");
         String line = myScanner.nextLine();
         String[] numbers = line.split(" ");
         double sum = 0;
