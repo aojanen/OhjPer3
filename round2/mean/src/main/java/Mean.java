@@ -19,6 +19,7 @@ public class Mean {
         for (String s : numbers){
             sum += Double.parseDouble(s);
         }
+        System.out.println();
         System.out.print("Mean: " + sum/numbers.length);
     }
 }
