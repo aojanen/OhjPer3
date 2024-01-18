@@ -2,3 +2,4 @@
 *.class
 /round2/mean/target/
 /round3/median/target/
+/round3/parameters/target/
