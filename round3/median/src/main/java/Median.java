@@ -8,6 +8,7 @@
  * @author ttakoj
  */
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Median {
 
@@ -15,14 +16,18 @@ public class Median {
 		Scanner user = new Scanner(System.in);
 		System.out.print("Enter numbers: ");
 		String line = user.nextLine();
-		String[] numbers = line.split("\\s");
+		double[] numbers = Arrays.stream(line.split("\\s"))
+                                  .mapToDouble(Double::parseDouble)
+                                  .toArray();
+		Arrays.sort(numbers);
 
 		double median;
 		if (numbers.length % 2 == 0) {
-			median = (Double.valueOf(numbers[numbers.length / 2]) + Double.valueOf(numbers[numbers.length / 2 - 1])) / 2;
+			median = (numbers[numbers.length / 2] + numbers[(numbers.length / 2) - 1]) / 2;
 		} else {
-			median = Double.valueOf(numbers[numbers.length / 2]);
+			median = numbers[numbers.length / 2];
 		}
+		System.out.println();
 		System.out.println("Median: " + String.valueOf(median));
 	}
 }
