@@ -14,7 +14,7 @@ public class Median {
 
 	public static void main(String[] args) {
 		Scanner user = new Scanner(System.in);
-		System.out.print("Enter numbers: ");
+		System.out.print("Enter numbers:");
 		String line = user.nextLine();
 		double[] numbers = Arrays.stream(line.split("\\s"))
                                   .mapToDouble(Double::parseDouble)
