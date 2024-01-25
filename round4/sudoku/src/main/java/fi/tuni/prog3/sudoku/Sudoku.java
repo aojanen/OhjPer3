@@ -16,6 +16,18 @@ public class Sudoku {
         public Cell() {
             this.value = " ";
         }
+		
+		public void setValue(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public boolean isEmpty() {
+            return value.equals(" ");
+        }
     }
 	
 	private Cell[][] board;
