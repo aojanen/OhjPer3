@@ -18,6 +18,9 @@ public class Sudoku {
         }
 		
 		public void setValue(String value) {
+			if (!value.matches("[1-9 ]")) {
+                throw new IllegalArgumentException();
+            }
             this.value = value;
         }
 
@@ -41,4 +44,26 @@ public class Sudoku {
         }
     }
 	
+	public void set(int i, int j, char c){
+		if (i>8 || j > 8){
+			System.out.format("Trying to access illegal cell (%d, %d)!%n", i, j );
+			return;
+		}
+		
+		try {
+			board[i][j].setValue(Character.toString(c));
+		} 
+		catch (IllegalArgumentException e){
+			System.out.format("Trying to set illegal character %s to (%d, %d)!%n", Character.toString(c), i, j );
+		}
+	}
+	
+	public Boolean check(){
+		return true;
+	}
+	
+	public void print(){
+		System.out.println("Out of order! Stay calm and wait for further instructions.");
+	}
+
 }
