@@ -14,6 +14,9 @@ public class Course implements Comparable<Course>{
 	private int credits;
 
 	public Course(String code, String name, int credits) {
+		this.code = code;
+		this.name = name;
+		this.credits = credits;
 	}
 	
 	public String getCode() {
@@ -29,7 +32,7 @@ public class Course implements Comparable<Course>{
 	}
 	
 		@Override public int compareTo(Course x){
-		return name.compareTo(x.name);
+		return name.compareTo(x.getName());
 	}
 	
 }

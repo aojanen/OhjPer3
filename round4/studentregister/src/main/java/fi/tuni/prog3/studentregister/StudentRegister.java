@@ -7,6 +7,7 @@ package fi.tuni.prog3.studentregister;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
  *
@@ -71,20 +72,20 @@ public class StudentRegister {
 
 		System.out.println(studentName + " (" + studentNumber + "):");
 		ArrayList<Attainment> att = attainments.get(studentNumber);
-		
-		if ("by name".equals(order)){
-			
-		} else if ("by code".equals(order)){
-			Collections.sort(att);
-		} else {
-			printStudentAttainments(studentNumber);
+
+		if ("by name".equals(order)) {
+			Collections.sort(att, new CourseNameComparator());
+		} else if ("by code".equals(order)) {
+			Collections.sort(att, Comparator.comparing(Attainment::getCourseCode));
 		}
-		
+
+		printAttainments(att);
+
 	}
 
 	public void printStudentAttainments(String studentNumber) {
 		if (!attainments.containsKey(studentNumber)) {
-			System.out.println("Unknown student number: studentNumber");
+			System.out.println("Unknown student number: " + studentNumber);
 			return;
 		}
 
@@ -98,12 +99,33 @@ public class StudentRegister {
 
 		System.out.println(studentName + " (" + studentNumber + "):");
 		ArrayList<Attainment> att = attainments.get(studentNumber);
-		
-		for (Attainment a:att){
-			String courseName = courses.stream().filter(course -> a.getCourseCode().equals(course.getCode())).map(Student::getName).findFirst();
-			System.out.println("  " + a.getCourseCode() + " " + courseName + ": " + a.getGrade());
-		}
+
+		printAttainments(att);
 
 	}
+
+	private void printAttainments(ArrayList<Attainment> att) {
+		for (Attainment a : att) {
+			System.out.println("  " + a.getCourseCode() + " " + getCourseName(a.getCourseCode()) + ": " + a.getGrade());
+		}
+	}
+
+	private String getCourseName(String courseCode) {
+		for (Course course : courses) {
+			if (course.getCode().equals(courseCode)) {
+				return course.getName();
+			}
+		}
+		return "UnknownCourseName";
+	}
+	
+	private class CourseNameComparator implements Comparator<Attainment> {
+        @Override
+        public int compare(Attainment att1, Attainment att2) {
+            String name1 = getCourseName(att1.getCourseCode());
+            String name2 = getCourseName(att2.getCourseCode());
+            return name1.compareTo(name2);
+        }
+    }
 
 }

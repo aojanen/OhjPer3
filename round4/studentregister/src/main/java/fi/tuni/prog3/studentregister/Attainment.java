@@ -8,7 +8,7 @@ package fi.tuni.prog3.studentregister;
  *
  * @author ttakoj
  */
-public class Attainment {
+public class Attainment{
 	private String courseCode;
 	private String studentNumber;
 	private int grade;
@@ -29,7 +29,5 @@ public class Attainment {
 
 	public int getGrade() {
 		return grade;
-	}
-	
-
+	}	
 }
