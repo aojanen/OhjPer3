@@ -65,6 +65,21 @@ public class Sudoku {
 			}
 		}
 
+		for (int i = 0; i < 9; i++) {
+			if (!checkColumn(i)) {
+				return false;
+			}
+		}
+		
+		// FIX Check blocks, not flexible solution.
+		for (int i = 0; i < 9; i += 3) {
+			for (int j = 0; j < 9; j += 3) {
+				if (!checkBlock(i, j)) {
+					return false;
+				}
+			}
+		}
+
 		return true;
 
 	}
@@ -87,6 +102,50 @@ public class Sudoku {
 
 		return true;
 	}
+
+	private boolean checkColumn(int col) {
+		for (int i = 1; i <= 9; i++) {
+			int count = 0;
+
+			for (int j = 0; j < 9; j++) {
+				if (board[j][col].getValue().equals(Integer.toString(i))) {
+					count++;
+				}
+			}
+
+			if (count > 1) {
+				System.out.println("Column " + col + " has multiple " + i + "'s!");
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
+	// FIX. Check 3x3 blocks. More flexible solution preferred.
+	private boolean checkBlock(int startRow, int startCol) {
+        for (int i = 1; i <= 9; i++) {
+            int count = 0;
+
+            for (int x = 0; x < 3; x++) {
+                for (int y = 0; y < 3; y++) {
+                    int currentRow = startRow + x;
+                    int currentCol = startCol + y;
+
+                    if (board[currentRow][currentCol].getValue().equals(Integer.toString(i))) {
+                        count++;
+                    }
+                }
+            }
+
+            if (count > 1) {
+                System.out.println("Block at (" + startRow + ", " + startCol + ") has multiple " + i + "'s!");
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 	public void print() {
 		System.out.println("Out of order! Stay calm and wait for further instructions.");
