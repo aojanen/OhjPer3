@@ -32,14 +32,13 @@ public class StudentRegister {
 	}
 
 	public void addAttainment(Attainment att) {
-		if (this.attainments.containsKey(att.getStudentNumber())) {
-			ArrayList<Attainment> attList = this.attainments.get(att.getStudentNumber());
-			attList.add(att);
-			this.attainments.put(att.getStudentNumber(), attList);
+		String studentNumber = att.getStudentNumber();
+		if (attainments.containsKey(studentNumber)) {
+			attainments.get(studentNumber).add(att);
 		} else {
 			ArrayList<Attainment> attList = new ArrayList<>();
 			attList.add(att);
-			this.attainments.put(att.getStudentNumber(), attList);
+			attainments.put(studentNumber, attList);
 		}
 	}
 
