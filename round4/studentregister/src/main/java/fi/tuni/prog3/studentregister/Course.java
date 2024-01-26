@@ -8,7 +8,7 @@ package fi.tuni.prog3.studentregister;
  *
  * @author ttakoj
  */
-public class Course {
+public class Course implements Comparable<Course>{
 	private String code;
 	private String name;
 	private int credits;
@@ -26,6 +26,10 @@ public class Course {
 
 	public int getCredits() {
 		return credits;
+	}
+	
+		@Override public int compareTo(Course x){
+		return name.compareTo(x.name);
 	}
 	
 }
