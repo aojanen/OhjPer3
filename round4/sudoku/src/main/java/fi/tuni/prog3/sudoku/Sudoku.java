@@ -148,7 +148,23 @@ public class Sudoku {
     }
 
 	public void print() {
-		System.out.println("Out of order! Stay calm and wait for further instructions.");
+		System.out.println("#####################################");
+		
+		for (int i = 0; i<9 ;i++){
+			for (int j = 0; j<9;j++){
+				if (j%3 == 0){
+					System.out.print("# " + board[i][j].getValue() + " ");
+				} else {
+					System.out.print("| " + board[i][j].getValue() + " ");
+				}
+			}
+			System.out.println("#");
+			if ((i+1)%3==0 && i>0){
+				System.out.println("#####################################");
+			}else{
+				System.out.println("#---+---+---#---+---+---#---+---+---#");
+			}
+		}
 	}
 
 }
