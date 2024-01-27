@@ -8,7 +8,7 @@ package fi.tuni.prog3.studentregister;
  *
  * @author ttakoj
  */
-public class Student implements Comparable<Student>{
+public class Student{
 	private String name;
 	private String studentNumber;
 
@@ -23,11 +23,6 @@ public class Student implements Comparable<Student>{
 
 	public String getStudentNumber() {
 		return studentNumber;
-	}
-	
-	
-	@Override public int compareTo(Student x){
-		return name.compareTo(x.name);
 	}
 }
 
