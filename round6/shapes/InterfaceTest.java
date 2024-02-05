@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import fi.tuni.prog3.shapes.Circle;
 import fi.tuni.prog3.shapes.Rectangle;
 import fi.tuni.prog3.shapes.IShapeMetrics;
+import java.util.Locale;
 
 public class InterfaceTest {
   public static void main(String args[]) {
@@ -38,8 +39,9 @@ public class InterfaceTest {
       System.out.println("Shape " + counter + ":");
       counter++;
       System.out.println(shape);
-      System.out.format("Area of %s: %.2f%n", shape.name(), shape.area());
-      System.out.format("Circumference of %s: %.2f%n", shape.name(), shape
+      // Force point as decimal separator.
+      System.out.format(Locale.ENGLISH, "Area of %s: %.2f%n", shape.name(), shape.area());
+      System.out.format(Locale.ENGLISH, "Circumference of %s: %.2f%n", shape.name(), shape
               .circumference());
     }
   }
