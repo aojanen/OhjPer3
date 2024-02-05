@@ -1,11 +1,19 @@
+import fi.tuni.prog3.comparison.Attainment;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import fi.tuni.prog3.comparison.Attainment;
 
 public class ComparisonTest {
+  // Quick hack by Jorma L. to avoid a non-standard toString override in Attainment.
+  private static void print(String header, ArrayList<Attainment> attainments) {
+     System.out.println(header);
+     String asLines = attainments.toString().replace(",", "\n,");
+     asLines = asLines.replace("]", "\n]");
+     System.out.println(asLines);
+  }     
+  
   public static void main(String[] args) throws IOException {
     String attainmentFN = args[0];
     ArrayList<Attainment> attainments = new ArrayList<>();
@@ -17,13 +25,13 @@ public class ComparisonTest {
                 studentCourseGrade[0], Integer.parseInt(studentCourseGrade[2])));
       }
     }
-    System.out.format("Original order:%n%s%n", attainments);
+    print("Original order:", attainments);
     Collections.sort(attainments);
-    System.out.format("Sorted in default order:%n%s%n", attainments);
+    print("Sorted in default order:", attainments);
     attainments.sort(Attainment.CODE_GRADE_CMP);
-    System.out.format("Sorted using CODE_GRADE_CMP:%n%s%n", attainments);
+    print("Sorted using CODE_GRADE_CMP:", attainments);
     attainments.sort(Attainment.CODE_STUDENT_CMP);
-    System.out.format("Sorted using CODE_STUDENT_CMP:%n%s%n", attainments);
+    print("Sorted using CODE_STUDENT_CMP:", attainments);
   }
 
 }
