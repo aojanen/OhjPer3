@@ -12,7 +12,7 @@ public class DateTime extends Date {
 
 	@Override
 	public String toString() {
-		return super.toString() + " " + String.format("Illegal time %02d:%02d:%02d", hour, minute, second);
+		return super.toString() + " " + String.format("%02d:%02d:%02d", hour, minute, second);
 	}
 	
 	private int hour;
