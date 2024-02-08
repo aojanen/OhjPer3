@@ -48,9 +48,8 @@ public class Date {
 		try {
 			LocalDate date = LocalDate.of(year, month, day);
 			return true;
-		} catch (DateTimeParseException | IllegalArgumentException e) {
+		} catch (Exception e) {
 			return false;
 		}
-
 	}
 }
