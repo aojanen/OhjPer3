@@ -103,11 +103,11 @@ public class WordGame {
 		}
 		String g = Character.toString(c).toLowerCase();
 		String tLow = targetWord.toLowerCase();
-		if (tLow.contains(g)) {
+		if (tLow.contains(g) && !gameState.getWord().contains(g)) {
 			StringBuilder guessState = new StringBuilder(gameState.getWord());
 			for (int i = 0; i < targetWord.length(); i++){
 				if (tLow.charAt(i) == g.charAt(0)){
-					guessState.setCharAt(i, c);
+					guessState.setCharAt(i, Character.toLowerCase(c));
 					gameState.missingChars--;
 				}
 				gameState.word = guessState.toString();
