@@ -62,7 +62,7 @@ public class WordGame {
 			return missingChars;
 		}
 		
-		public void setWord(String word){
+/*		public void setWord(String word){
 			this.word = word;
 		}
 		
@@ -76,7 +76,7 @@ public class WordGame {
 		
 		public void nulMissingChars(){
 			missingChars = 0;
-		}
+		} */
 	}
 	
 	public void initGame(int wordIndex, int mistakeLimit){
@@ -108,17 +108,17 @@ public class WordGame {
 			for (int i = 0; i < targetWord.length(); i++){
 				if (tLow.charAt(i) == g.charAt(0)){
 					guessState.setCharAt(i, c);
-					gameState.decMissingChars();
+					gameState.missingChars--;
 				}
-				gameState.setWord(guessState.toString());
+				gameState.word = guessState.toString();
 			}
 		} else {
-			gameState.addMistake();
+			gameState.mistakes++;
 		}
 		
 		if (gameState.getMissingChars() == 0 || gameState.getMistakes() > gameState.getMistakeLimit()){
 			isGameActive = false;
-			gameState.setWord(targetWord);
+			gameState.word = targetWord;
 			
 		}
 		return gameState;
@@ -128,14 +128,15 @@ public class WordGame {
 		if (!isGameActive()){
 			throw new GameStateException("There is currently no active word game!");
 		}
-		if (g == targetWord){
-			gameState.setWord(g);
-			gameState.nulMissingChars();
+		if (g.equals(targetWord)){
+			gameState.word = g;
+			gameState.missingChars = 0;
+			isGameActive = false;
 		} else {
-			gameState.addMistake();
+			gameState.mistakes++;
 			if (gameState.getMistakes() > gameState.getMistakeLimit()){
 				isGameActive = false;
-				gameState.setWord(targetWord);
+				gameState.word = targetWord;
 			}
 		}
 		return gameState;
