@@ -9,7 +9,7 @@ package fi.tuni.prog3.shapes;
  * @author ttakoj
  */
 public interface IShapeMetrics {
-	static final double PI = 3.141593;
+	static final double PI = 3.14159;
 	String name();
 	double area();
 	double circumference();
