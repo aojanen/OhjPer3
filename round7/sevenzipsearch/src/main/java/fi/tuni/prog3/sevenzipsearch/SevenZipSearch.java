@@ -23,10 +23,10 @@ public class SevenZipSearch {
 
 	public static void main(String args[]) {
 		Scanner inp = new Scanner(System.in);
-		System.out.print("File: ");
+		System.out.print("File:");
 		final String inputFileName = inp.nextLine();
 		System.out.println();
-		System.out.print("Query: ");
+		System.out.print("Query:");
 		final String query = inp.nextLine();
 		System.out.println();
 		System.out.println();
