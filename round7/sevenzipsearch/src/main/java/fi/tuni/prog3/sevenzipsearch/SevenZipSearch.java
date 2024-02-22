@@ -29,6 +29,7 @@ public class SevenZipSearch {
 		System.out.print("Query: ");
 		final String query = inp.nextLine();
 		System.out.println();
+		System.out.println();
 
 		try ( SevenZFile file = new SevenZFile(Paths.get(inputFileName).toFile())) {
 			for (SevenZArchiveEntry entry : file.getEntries()) {
