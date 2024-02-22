@@ -50,8 +50,9 @@ public class SevenZipSearch {
 					} catch (IOException e) {
 						System.out.println("Another PaniC!");
 					}
+					System.out.println();
 				}
-				System.out.println();
+				
 			}
 
 		} catch (IOException e) {
