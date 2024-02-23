@@ -25,9 +25,9 @@ public class CountryData {
              FileReader populationReader = new FileReader(populationFile);
              FileReader gdpReader = new FileReader(gdpFile)) {
 
-            readCountryData(countries, areaReader, "Area");
-            readCountryData(countries, populationReader, "Population");
-            readCountryData(countries, gdpReader, "GDP");
+            readCountryData(countries, areaReader);
+            readCountryData(countries, populationReader);
+            readCountryData(countries, gdpReader);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,7 +36,7 @@ public class CountryData {
         return countries;
     }
 
-    private static void readCountryData(List<Country> countries, FileReader reader, String dataType) {
+    private static void readCountryData(List<Country> countries, FileReader reader) {
 
         JsonParser parser = new JsonParser();
         JsonElement rootElement = parser.parse(reader);
@@ -50,6 +50,7 @@ public class CountryData {
             JsonArray fieldArray = recordObject.getAsJsonArray("field");
 
             String countryName = "";
+            String item = "";
             double value = 0;
 
             for (JsonElement fieldElement : fieldArray) {
@@ -58,7 +59,9 @@ public class CountryData {
 
                 if ("Country or Area".equals(attributeName)) {
                     countryName = fieldObject.get("value").getAsString();
-                } else if (dataType.equals(attributeName)) {
+                } else if ("Item".equals(attributeName)) {
+                    item = fieldObject.get("value").getAsString();
+                } else {
                     value = fieldObject.get("value").getAsDouble();
                 }
             }
@@ -66,11 +69,11 @@ public class CountryData {
             // Check if the country already exists in the list
             Country existingCountry = findCountryByName(countries, countryName);
             if (existingCountry != null) {
-                updateCountryData(existingCountry, dataType, value);
+                updateCountryData(existingCountry, item, value);
             } else {
                 // Create a new country instance and add it to the list
                 Country newCountry = new Country(countryName, 0, 0, 0);
-                updateCountryData(newCountry, dataType, value);
+                updateCountryData(newCountry, item, value);
                 countries.add(newCountry);
             }
         }
@@ -87,11 +90,11 @@ public class CountryData {
     }
 
     private static void updateCountryData(Country country, String dataType, double value) {
-        if (dataType.equals("Area")) {
+        if (dataType.equals("Surface area (sq. km)")) {
             country.setArea(value);
-        } else if (dataType.equals("Population")) {
+        } else if (dataType.equals("Population, total")) {
             country.setPopulation((long) value);
-        } else if (dataType.equals("GDP")) {
+        } else if (dataType.equals("GDP (constant 2015 US$)")) {
             country.setGdp(value);
         }
     }
