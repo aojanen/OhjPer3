@@ -1,111 +1,98 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fi.tuni.prog3.jsoncountries;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.gson.*;
+import java.io.*;
+import java.util.*;
 
-/**
- *
- * @author ttakoj
- */
 public class CountryData {
+    public static void main(String[] args) {
+        String areaFile = "area1.json";
+        String populationFile = "population1.json";
+        String gdpFile = "gdp1.json";
 
-	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        List<Country> countries = readFromJsons(areaFile, populationFile, gdpFile);
 
-	public static List<Country> readFromJsons(String areaFile, String populationFile, String gdpFile) {
-		List<Country> countries = new ArrayList<>();
+        for (Country country : countries) {
+            System.out.println(country);
+            System.out.println();
+        }
+    }
 
-		try ( FileReader areaReader = new FileReader(areaFile);  FileReader populationReader = new FileReader(populationFile);  FileReader gdpReader = new FileReader(gdpFile)) {
+    public static List<Country> readFromJsons(String areaFile, String populationFile, String gdpFile) {
+        List<Country> countries = new ArrayList<>();
 
-			countries.addAll(readCountryData(areaReader, "Area"));
-			countries.addAll(readCountryData(populationReader, "Population"));
-			countries.addAll(readCountryData(gdpReader, "GDP"));
+        try (FileReader areaReader = new FileReader(areaFile);
+             FileReader populationReader = new FileReader(populationFile);
+             FileReader gdpReader = new FileReader(gdpFile)) {
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+            readCountryData(countries, areaReader, "Area");
+            readCountryData(countries, populationReader, "Population");
+            readCountryData(countries, gdpReader, "GDP");
 
-		return countries;
-	}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	private static List<Country> readCountryData(FileReader reader, String dataType) {
-		List<Country> countries = new ArrayList<>();
-		Map<String, Country> countryMap = new HashMap<>();
+        return countries;
+    }
 
-		JsonParser parser = new JsonParser();
-		JsonElement rootElement = parser.parse(reader);
+    private static void readCountryData(List<Country> countries, FileReader reader, String dataType) {
 
-		JsonObject rootObject = rootElement.getAsJsonObject();
-		JsonObject dataObject = rootObject.getAsJsonObject("Root").getAsJsonObject("data");
-		JsonArray recordArray = dataObject.getAsJsonArray("record");
+        JsonParser parser = new JsonParser();
+        JsonElement rootElement = parser.parse(reader);
 
-		for (JsonElement recordElement : recordArray) {
-			JsonObject recordObject = recordElement.getAsJsonObject();
-			JsonArray fieldArray = recordObject.getAsJsonArray("field");
+        JsonObject rootObject = rootElement.getAsJsonObject();
+        JsonObject dataObject = rootObject.getAsJsonObject("Root").getAsJsonObject("data");
+        JsonArray recordArray = dataObject.getAsJsonArray("record");
 
-			String countryName = "";
-			double value = 0;
+        for (JsonElement recordElement : recordArray) {
+            JsonObject recordObject = recordElement.getAsJsonObject();
+            JsonArray fieldArray = recordObject.getAsJsonArray("field");
 
-			for (JsonElement fieldElement : fieldArray) {
-				JsonObject fieldObject = fieldElement.getAsJsonObject();
-				String attributeName = fieldObject.getAsJsonObject("attributes").get("name").getAsString();
+            String countryName = "";
+            double value = 0;
 
-				if ("Country or Area".equals(attributeName)) {
-					countryName = fieldObject.get("value").getAsString();
-				} else if (dataType.equals(attributeName)) {
-					value = fieldObject.get("value").getAsDouble();
-				}
-			}
+            for (JsonElement fieldElement : fieldArray) {
+                JsonObject fieldObject = fieldElement.getAsJsonObject();
+                String attributeName = fieldObject.getAsJsonObject("attributes").get("name").getAsString();
 
-			// Check if the country already exists in the map
-			if (countryMap.containsKey(countryName)) {
-				// Update the existing country with additional data
-				Country existingCountry = countryMap.get(countryName);
-				if (dataType.equals("Area")) {
-					existingCountry.setArea(value);
-				} else if (dataType.equals("Population")) {
-					existingCountry.setPopulation((long) value);
-				} else if (dataType.equals("GDP")) {
-					existingCountry.setGdp(value);
-				}
-			} else {
-				// Add a new country to the map
-				Country newCountry = new Country(countryName, dataType.equals("Area") ? value : 0, dataType.equals("Population") ? (long) value : 0, dataType.equals("GDP") ? value : 0);
-				countryMap.put(countryName, newCountry);
-				countries.add(newCountry);
-			}
-		}
+                if ("Country or Area".equals(attributeName)) {
+                    countryName = fieldObject.get("value").getAsString();
+                } else if (dataType.equals(attributeName)) {
+                    value = fieldObject.get("value").getAsDouble();
+                }
+            }
 
-		return countries;
-	}
+            // Check if the country already exists in the list
+            Country existingCountry = findCountryByName(countries, countryName);
+            if (existingCountry != null) {
+                updateCountryData(existingCountry, dataType, value);
+            } else {
+                // Create a new country instance and add it to the list
+                Country newCountry = new Country(countryName, 0, 0, 0);
+                updateCountryData(newCountry, dataType, value);
+                countries.add(newCountry);
+            }
+        }
 
-	public static void writeToJson(List<Country> countries, String countryFile) {
-		try ( FileWriter writer = new FileWriter(countryFile)) {
-			gson.toJson(countries, writer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+}
 
-	public static void main(String[] args) {
-		// Example usage
-		List<Country> countries = readFromJsons("area.json", "population.json", "gdp.json");
-		Collections.sort(countries); // Sort countries by name
-		writeToJson(countries, "output.json");
-	}
+    private static Country findCountryByName(List<Country> countries, String name) {
+        for (Country country : countries) {
+            if (country.getName().equals(name)) {
+                return country;
+            }
+        }
+        return null;
+    }
+
+    private static void updateCountryData(Country country, String dataType, double value) {
+        if (dataType.equals("Area")) {
+            country.setArea(value);
+        } else if (dataType.equals("Population")) {
+            country.setPopulation((long) value);
+        } else if (dataType.equals("GDP")) {
+            country.setGdp(value);
+        }
+    }
 }
